@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/user_model.dart';
 import '../services/auth_service.dart';
@@ -59,10 +60,12 @@ class AuthNotifier extends StateNotifier<AuthState> {
       );
       return true;
     } on ApiException catch (e) {
+      debugPrint('AuthNotifier ApiException: ${e.message}');
       state = state.copyWith(isLoading: false, errorMessage: e.message);
       return false;
     } catch (e) {
-      state = state.copyWith(isLoading: false, errorMessage: 'Error.');
+      debugPrint('AuthNotifier Unexpected Error: $e');
+      state = state.copyWith(isLoading: false, errorMessage: 'Something went wrong. Please try again.');
       return false;
     }
   }

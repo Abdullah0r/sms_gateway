@@ -11,7 +11,6 @@ class UserModel {
     required this.token,
   });
 
-
   factory UserModel.fromJson(Map<String, dynamic> json, String token) {
     return UserModel(
       id: int.tryParse(json['id']?.toString() ?? '') ?? 0,
@@ -21,14 +20,12 @@ class UserModel {
     );
   }
 
-
   Map<String, dynamic> toMap() => {
     'id': id,
     'username': username,
     'name': name,
     'token': token,
   };
-
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(

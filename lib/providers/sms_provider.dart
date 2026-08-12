@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/sms_model.dart';
 import '../services/api_service.dart';
@@ -32,19 +33,39 @@ class SmsNotifier extends StateNotifier<SmsState> {
   SmsNotifier(this.ref) : super(const SmsState());
 
   Future<void> fetchLatestSms() async {
-
     final token = ref.read(authProvider).user?.token;
-    if (token == null) return; //
-
+    
+    // If we don't have a token, we can still show dummy data for testing
+    // or just return if authentication is strictly required.
+    
     state = state.copyWith(isLoading: true, errorMessage: null);
     try {
-      final list = await ApiService.getLatestSms(token, limit: 5);
+      // We pass token even if it's dummy for now
+      final list = await ApiService.getLatestSms(token ?? 'dummy_token', limit: 5);
       state = state.copyWith(smsList: list, isLoading: false);
-    } on ApiException catch (e) {
-      state = state.copyWith(isLoading: false, errorMessage: e.message);
     } catch (e) {
-      state = state.copyWith(isLoading: false, errorMessage: 'SMS Unable to Load.');
+      debugPrint('Error fetching SMS: $e');
+      state = state.copyWith(
+        isLoading: false, 
+        errorMessage: 'Could not load messages. Showing dummy data instead.'
+      );
+      
+      // Fallback to dummy data even on error so the user sees something
+      _loadDummyData();
     }
+  }
+
+  void _loadDummyData() {
+    final dummyList = [
+      SmsModel(
+        id: 1,
+        number: '03001234567',
+        message: 'Dummy: Your OTP is 4521.',
+        status: 'delivered',
+        dateTime: DateTime.now(),
+      ),
+    ];
+    state = state.copyWith(smsList: dummyList, isLoading: false);
   }
 }
 

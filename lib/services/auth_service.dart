@@ -7,20 +7,16 @@ class AuthService {
   static const _keyUser = 'auth_user';
 
   static Future<UserModel> login(String username, String password) async {
-
     final user = await ApiService.login(username, password);
-
 
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_keyUser, jsonEncode(user.toMap()));
-
 
     return user;
   }
 
   static Future<UserModel?> getSavedUser() async {
     final prefs = await SharedPreferences.getInstance();
-
 
     final raw = prefs.getString(_keyUser);
     if (raw == null) return null;
@@ -34,7 +30,6 @@ class AuthService {
   }
 
   static Future<void> logout() async {
-
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_keyUser);
   }
