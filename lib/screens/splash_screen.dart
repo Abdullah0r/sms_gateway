@@ -20,7 +20,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
 
   Future<void> _checkAuth() async {
     // Show splash for at least 2 seconds
-    await Future.delayed(const Duration(seconds: 3));
+    await Future.delayed(const Duration(seconds: 2));
     
     if (!mounted) return;
 
@@ -63,9 +63,10 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
             Text(
               'SMS Gateway',
               style: TextStyle(
-                color: Colors.black,
-                fontSize: 19,
+                color: Colors.white,
+                fontSize: 24,
                 fontWeight: FontWeight.bold,
+                letterSpacing: 1.2,
               ),
             ),
             SizedBox(height: 32),

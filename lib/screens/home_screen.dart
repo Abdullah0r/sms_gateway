@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import '../providers/auth_providers.dart';
 import '../providers/sms_provider.dart';
 import '../models/sms_model.dart';
+import 'Login_screen.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -34,6 +35,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     if (confirmed == true) {
       await ref.read(authProvider.notifier).logout();
+      if (mounted) {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const LoginScreen()),
+          (route) => false,
+        );
+      }
     }
   }
 
@@ -53,17 +60,25 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           children: [
             Text(
               'Dashboard',
-              style: TextStyle(color: Colors.grey[900], fontWeight: FontWeight.bold, fontSize: 22),
+
+              style: TextStyle(color: Colors.grey[900],backgroundColor: Colors.blueAccent
+                  .withOpacity(0.2),
+
+                  fontWeight: FontWeight.bold, fontSize: 30),
             ),
             Text(
-              'Welcome back, ${user?.username ?? 'User'}',
-              style: TextStyle(color: Colors.grey[600], fontSize: 13, fontWeight: FontWeight.bold),
+              'Welcome back, ${user?.username != null && user!.username.isNotEmpty ? user.username : 'User'}',
+              style: TextStyle(color: Colors.grey[600], fontSize: 13, fontWeight: FontWeight.bold,
+                  backgroundColor: Colors.blueAccent.withOpacity(0.2)),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+
             ),
           ],
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.logout_rounded, color: Colors.grey[700]),
+            icon: Icon(Icons.logout_rounded, color: Colors.red[400]),
             onPressed: _logout,
           ),
           const SizedBox(width: 8),

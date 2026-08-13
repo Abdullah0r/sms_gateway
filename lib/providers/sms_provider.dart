@@ -35,12 +35,11 @@ class SmsNotifier extends StateNotifier<SmsState> {
   Future<void> fetchLatestSms() async {
     final token = ref.read(authProvider).user?.token;
     
-    // If we don't have a token, we can still show dummy data for testing
-    // or just return if authentication is strictly required.
+
     
     state = state.copyWith(isLoading: true, errorMessage: null);
     try {
-      // We pass token even if it's dummy for now
+
       final list = await ApiService.getLatestSms(token ?? 'dummy_token', limit: 5);
       state = state.copyWith(smsList: list, isLoading: false);
     } catch (e) {
@@ -50,7 +49,7 @@ class SmsNotifier extends StateNotifier<SmsState> {
         errorMessage: 'Could not load messages. Showing dummy data instead.'
       );
       
-      // Fallback to dummy data even on error so the user sees something
+
       _loadDummyData();
     }
   }
